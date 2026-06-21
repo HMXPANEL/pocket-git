@@ -1,13 +1,13 @@
 package com.aor.pocketgit.application;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.StrictMode;
 import com.aor.pocketgit.services.GitService;
 
-public class PocketGit extends Application {
+public class PocketGit extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().build());
