@@ -38,7 +38,11 @@ public abstract class UpdatableActivity extends AppCompatActivity {
     }
 
     protected void onResume() {
-        registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST));
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+            registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST));
+        }
         super.onResume();
     }
 

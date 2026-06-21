@@ -1,0 +1,51 @@
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 9c02890..9b405db 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -10,6 +10,7 @@
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+ 	<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+ 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
++	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+     <uses-permission android:name="android.permission.INTERNET" />
+ 
+     <application
+@@ -71,13 +72,17 @@
+             android:label="@string/title_activity_help"
+             android:name=".activities.HelpActivity" />
+         <service
+-			android:name=".services.GitClone" />
++			android:name=".services.GitClone"
++			android:foregroundServiceType="dataSync" />
+         <service
+-			android:name=".services.GitPull" />
++			android:name=".services.GitPull"
++			android:foregroundServiceType="dataSync" />
+         <service
+-			android:name=".services.GitPush" />
++			android:name=".services.GitPush"
++			android:foregroundServiceType="dataSync" />
+         <service
+-			android:name=".services.GitFetch" />
++			android:name=".services.GitFetch"
++			android:foregroundServiceType="dataSync" />
+ 	</application>
+ 
+ </manifest>
+diff --git a/app/src/main/java/com/aor/pocketgit/activities/UpdatableActivity.java b/app/src/main/java/com/aor/pocketgit/activities/UpdatableActivity.java
+index 7c5828a..e611af3 100644
+--- a/app/src/main/java/com/aor/pocketgit/activities/UpdatableActivity.java
++++ b/app/src/main/java/com/aor/pocketgit/activities/UpdatableActivity.java
+@@ -38,7 +38,11 @@ public abstract class UpdatableActivity extends AppCompatActivity {
+     }
+ 
+     protected void onResume() {
+-        registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST));
++        if (android.os.Build.VERSION.SDK_INT >= 33) {
++            registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST), Context.RECEIVER_NOT_EXPORTED);
++        } else {
++            registerReceiver(this.mUpdateReceiver, new IntentFilter(UPDATE_BROADCAST));
++        }
+         super.onResume();
+     }
+ 
