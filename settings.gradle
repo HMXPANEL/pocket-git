@@ -1,0 +1,16 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // JCenter scoped to material-dialogs only (not migrated to MavenCentral)
+        // TODO: Phase 1 - Replace material-dialogs with MaterialAlertDialogBuilder
+        jcenter() {
+            content {
+                includeGroup("com.afollestad.material-dialogs")
+            }
+        }
+    }
+}
+rootProject.name = "Pocket Git"
+include ':app'

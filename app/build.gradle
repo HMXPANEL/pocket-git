@@ -1,0 +1,48 @@
+plugins {
+	id "com.android.application"
+}
+
+android {
+	compileSdk 33
+
+	defaultConfig {
+		applicationId "com.aor.pocketgit"
+		minSdk 16
+		targetSdk 33
+		versionCode 160
+		versionName "1.6"
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
+
+	lintOptions {
+		// Remove that when code getting stronger enough
+		abortOnError false
+	}
+
+	packagingOptions {
+		resources.merges.add("plugin.properties")
+	}
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+}
+
+dependencies {
+	implementation "androidx.appcompat:appcompat:1.6.1"
+	// AndroidX Preference 1.2 and later uses non-lightweight kotlin
+	implementation "androidx.preference:preference:1.1.1"
+	implementation "com.google.android.material:material:1.11.0"
+	implementation "com.github.castorflex.smoothprogressbar:library:1.1.0"
+	implementation "org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:6.2.0.202206071550-r"
+	implementation "com.afollestad.material-dialogs:core:0.9.6.0"
+	implementation "com.github.bumptech.glide:glide:4.16.0"
+	annotationProcessor "com.github.bumptech.glide:compiler:4.16.0"
+}
