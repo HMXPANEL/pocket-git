@@ -1,0 +1,27 @@
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 9b405db..a1c2e3f 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -10,6 +10,7 @@
+ 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+ 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
++	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+     <uses-permission android:name="android.permission.INTERNET" />
+ 
+     <application
+diff --git a/app/src/main/java/com/aor/pocketgit/activities/MainActivity.java b/app/src/main/java/com/aor/pocketgit/activities/MainActivity.java
+index ab24e15..f2d8b91 100644
+--- a/app/src/main/java/com/aor/pocketgit/activities/MainActivity.java
++++ b/app/src/main/java/com/aor/pocketgit/activities/MainActivity.java
+@@ -291,6 +291,11 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
+     }
+ 
+     private void checkPermissions() {
++        if (android.os.Build.VERSION.SDK_INT >= 33) {
++            if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS") != 0) {
++                ActivityCompat.requestPermissions(this, new String[] { "android.permission.POST_NOTIFICATIONS" }, 2);
++            }
++        }
+         if (android.os.Build.VERSION.SDK_INT >= 30) {
+             if (!android.os.Environment.isExternalStorageManager()) {
+                 showSnackBar(findViewById(R.id.list_projects), "Storage access needed. Tap to grant.", -2, "Grant", new View.OnClickListener() {

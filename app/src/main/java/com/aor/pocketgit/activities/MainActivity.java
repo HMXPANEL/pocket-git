@@ -291,6 +291,11 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
     }
 
     private void checkPermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(this, "android.permission.POST_NOTIFICATIONS") != 0) {
+                ActivityCompat.requestPermissions(this, new String[] { "android.permission.POST_NOTIFICATIONS" }, 2);
+            }
+        }
         if (android.os.Build.VERSION.SDK_INT >= 30) {
             if (!android.os.Environment.isExternalStorageManager()) {
                 showSnackBar(findViewById(R.id.list_projects), "Storage access needed. Tap to grant.", -2, "Grant", new View.OnClickListener() {
@@ -315,6 +320,9 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 2) {
+            return;
+        }
         if (requestCode != 1) {
             return;
         }
