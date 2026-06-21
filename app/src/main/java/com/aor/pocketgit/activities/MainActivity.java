@@ -291,6 +291,22 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
     }
 
     private void checkPermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            if (!android.os.Environment.isExternalStorageManager()) {
+                showSnackBar(findViewById(R.id.list_projects), "Storage access needed. Tap to grant.", -2, "Grant", new View.OnClickListener() {
+                    public void onClick(View v) {
+                        try {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                            intent.setData(android.net.Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                        }
+                    }
+                });
+            }
+            return;
+        }
         int canRead = ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE");
         int canWrite = ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE");
         if (canRead == -1 || canWrite == -1) {
