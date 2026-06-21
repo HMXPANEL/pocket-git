@@ -67,36 +67,35 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 long[] ids = MainActivity.this.mProjectList.getCheckedItemIds();
-                switch (item.getItemId()) {
-                    case R.id.action_delete_project:
-                        List<Integer> toDelete = new ArrayList<>();
-                        ProjectAdapter adapter = (ProjectAdapter) MainActivity.this.mProjectList.getAdapter();
-                        for (long id : ids) {
-                            toDelete.add(Integer.valueOf(adapter.getItem((int) id).getId()));
-                        }
-                        MainActivity.this.deleteProjects(toDelete);
-                        mode.finish();
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_delete_project) {
+                    List<Integer> toDelete = new ArrayList<>();
+                    ProjectAdapter adapter = (ProjectAdapter) MainActivity.this.mProjectList.getAdapter();
+                    for (long id : ids) {
+                        toDelete.add(Integer.valueOf(adapter.getItem((int) id).getId()));
+                    }
+                    MainActivity.this.deleteProjects(toDelete);
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_edit_project) {
+                    if (ids.length != 1) {
                         return true;
-                    case R.id.action_edit_project:
-                        if (ids.length != 1) {
-                            return true;
-                        }
-                        Project project = (Project) MainActivity.this.mProjectList.getItemAtPosition((int) ids[0]);
-                        Intent intent = new Intent(MainActivity.this, ProjectActivity.class);
-                        intent.putExtra("id", Integer.toString(project.getId()));
-                        intent.putExtra(ConfigConstants.CONFIG_KEY_NAME, project.getName());
-                        intent.putExtra("url", project.getUrl());
-                        intent.putExtra("local_path", project.getLocalPath());
-                        intent.putExtra("authentication", project.getAuthentication());
-                        intent.putExtra("username", project.getUsername());
-                        intent.putExtra("password", project.getPassword());
-                        intent.putExtra("privatekey", project.getPrivateKey());
-                        MainActivity.this.startActivityForResult(intent, 2);
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
+                    }
+                    Project project = (Project) MainActivity.this.mProjectList.getItemAtPosition((int) ids[0]);
+                    Intent intent = new Intent(MainActivity.this, ProjectActivity.class);
+                    intent.putExtra("id", Integer.toString(project.getId()));
+                    intent.putExtra(ConfigConstants.CONFIG_KEY_NAME, project.getName());
+                    intent.putExtra("url", project.getUrl());
+                    intent.putExtra("local_path", project.getLocalPath());
+                    intent.putExtra("authentication", project.getAuthentication());
+                    intent.putExtra("username", project.getUsername());
+                    intent.putExtra("password", project.getPassword());
+                    intent.putExtra("privatekey", project.getPrivateKey());
+                    MainActivity.this.startActivityForResult(intent, 2);
+                    mode.finish();
+                    return true;
                 }
+                return false;
             }
 
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -129,7 +128,7 @@ public class MainActivity extends UpdatableActivity implements ActivityCompat.On
 
     private void setupFAB() {
         TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        getTheme().resolveAttribute(android.R.attr.colorPrimary, typedValue, true);
         new FloatingActionButton.Builder(this).withColor(typedValue.data).withDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_add)).withMargins(0, 0, 16, 16).create().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MainActivity.this.startActivityForResult(new Intent(MainActivity.this, ProjectActivity.class), 1);

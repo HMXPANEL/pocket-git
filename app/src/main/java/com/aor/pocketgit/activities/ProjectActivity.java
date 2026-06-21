@@ -297,22 +297,18 @@ public class ProjectActivity extends UpdatableActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case 16908332:
-            case R.id.action_cancel:
-                cancel();
-                break;
-            case R.id.action_save:
-                calculateErrors();
-                String error = getErrorMessage();
-                if (error != null) {
-                    Toast.makeText(this, error, 0).show();
-                    break;
-                } else {
-                    createResult();
-                    finish();
-                    break;
-                }
+        int itemId = item.getItemId();
+        if (itemId == 16908332 || itemId == R.id.action_cancel) {
+            cancel();
+        } else if (itemId == R.id.action_save) {
+            calculateErrors();
+            String error = getErrorMessage();
+            if (error != null) {
+                Toast.makeText(this, error, 0).show();
+            } else {
+                createResult();
+                finish();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

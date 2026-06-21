@@ -199,41 +199,40 @@ public class FilesActivity extends UpdatableActivity {
             }
 
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.action_blame_file:
-                        FilesActivity.this.actionBlame();
-                        mode.finish();
-                        return true;
-                    case R.id.action_delete_file:
-                        FilesActivity.this.actionDeleteFiles();
-                        mode.finish();
-                        return true;
-                    case R.id.action_diff_file:
-                        FilesActivity.this.actionDiff();
-                        mode.finish();
-                        return true;
-                    case R.id.action_remove_file:
-                        FilesActivity.this.actionRemoveFiles();
-                        mode.finish();
-                        return true;
-                    case R.id.action_revert_file:
-                        FilesActivity.this.actionRevertFiles();
-                        mode.finish();
-                        return true;
-                    case R.id.action_select_all:
-                        FilesActivity.this.actionSelectAll();
-                        return true;
-                    case R.id.action_stage_file:
-                        FilesActivity.this.actionStage();
-                        mode.finish();
-                        return true;
-                    case R.id.action_unstage_file:
-                        FilesActivity.this.actionUnstage();
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
+                int itemId = item.getItemId();
+                if (itemId == R.id.action_blame_file) {
+                    FilesActivity.this.actionBlame();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_delete_file) {
+                    FilesActivity.this.actionDeleteFiles();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_diff_file) {
+                    FilesActivity.this.actionDiff();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_remove_file) {
+                    FilesActivity.this.actionRemoveFiles();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_revert_file) {
+                    FilesActivity.this.actionRevertFiles();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_select_all) {
+                    FilesActivity.this.actionSelectAll();
+                    return true;
+                } else if (itemId == R.id.action_stage_file) {
+                    FilesActivity.this.actionStage();
+                    mode.finish();
+                    return true;
+                } else if (itemId == R.id.action_unstage_file) {
+                    FilesActivity.this.actionUnstage();
+                    mode.finish();
+                    return true;
                 }
+                return false;
             }
 
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -386,7 +385,7 @@ public class FilesActivity extends UpdatableActivity {
 
     private void setUpFAB() {
         TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        getTheme().resolveAttribute(android.R.attr.colorPrimary, typedValue, true);
         this.mCommitFAB = new FloatingActionButton.Builder(this).withColor(typedValue.data).withDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_commit)).withMargins(0, 0, 16, 16).create();
         this.mCommitFAB.setVisibility(8);
         this.mCommitFAB.setOnClickListener(new View.OnClickListener() {
@@ -819,73 +818,53 @@ public class FilesActivity extends UpdatableActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
-        switch (item.getItemId()) {
-            case R.id.action_author:
-                optionSetAuthor();
-                break;
-            case R.id.action_create_branch:
-                optionCreateBranch();
-                break;
-            case R.id.action_delete_branch:
-                optionDeleteBranch();
-                break;
-            case R.id.action_fetch:
-                optionFetch();
-                break;
-            case R.id.action_help:
-                optionHelp();
-                break;
-            case R.id.action_log:
-                optionLog();
-                break;
-            case R.id.action_manage_remotes:
-                Intent intent = new Intent(this, RemotesActivity.class);
-                intent.putExtra("id", Integer.toString(this.mProject.getId()));
-                startActivity(intent);
-                break;
-            case R.id.action_merge:
-                optionMerge();
-                break;
-            case R.id.action_new_file:
-                optionNewFile();
-                break;
-            case R.id.action_new_folder:
-                optionNewFolder();
-                break;
-            case R.id.action_pull:
-                optionPull();
-                break;
-            case R.id.action_push:
-                optionPush();
-                break;
-            case R.id.action_revert:
-                optionRevert();
-                break;
-            case R.id.action_sort_files:
-                new SortFilesDialog(this).showDialog().setSortListener(new SortFilesDialog.SortListener() {
-                    public void sortChanged() {
-                        FilesActivity.this.refreshFiles(true);
-                    }
-                });
-                break;
-            case R.id.action_stash_apply:
-                optionStashApply(0);
-                break;
-            case R.id.action_stash_create:
-                optionStashCreate();
-                break;
-            case R.id.action_stash_list:
-                optionStashList();
-                break;
-            case R.id.action_tag_create:
-                optionTagCreate();
-                break;
-            case R.id.action_tag_list:
-                optionTagList();
-                break;
-            case R.id.action_tag_push:
-                optionTagPush();
-                break;
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_author) {
+            optionSetAuthor();
+        } else if (itemId == R.id.action_create_branch) {
+            optionCreateBranch();
+        } else if (itemId == R.id.action_delete_branch) {
+            optionDeleteBranch();
+        } else if (itemId == R.id.action_fetch) {
+            optionFetch();
+        } else if (itemId == R.id.action_help) {
+            optionHelp();
+        } else if (itemId == R.id.action_log) {
+            optionLog();
+        } else if (itemId == R.id.action_manage_remotes) {
+            Intent intent = new Intent(this, RemotesActivity.class);
+            intent.putExtra("id", Integer.toString(this.mProject.getId()));
+            startActivity(intent);
+        } else if (itemId == R.id.action_merge) {
+            optionMerge();
+        } else if (itemId == R.id.action_new_file) {
+            optionNewFile();
+        } else if (itemId == R.id.action_new_folder) {
+            optionNewFolder();
+        } else if (itemId == R.id.action_pull) {
+            optionPull();
+        } else if (itemId == R.id.action_push) {
+            optionPush();
+        } else if (itemId == R.id.action_revert) {
+            optionRevert();
+        } else if (itemId == R.id.action_sort_files) {
+            new SortFilesDialog(this).showDialog().setSortListener(new SortFilesDialog.SortListener() {
+                public void sortChanged() {
+                    FilesActivity.this.refreshFiles(true);
+                }
+            });
+        } else if (itemId == R.id.action_stash_apply) {
+            optionStashApply(0);
+        } else if (itemId == R.id.action_stash_create) {
+            optionStashCreate();
+        } else if (itemId == R.id.action_stash_list) {
+            optionStashList();
+        } else if (itemId == R.id.action_tag_create) {
+            optionTagCreate();
+        } else if (itemId == R.id.action_tag_list) {
+            optionTagList();
+        } else if (itemId == R.id.action_tag_push) {
+            optionTagPush();
         }
         return super.onOptionsItemSelected(item);
     }

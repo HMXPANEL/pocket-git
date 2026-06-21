@@ -80,23 +80,19 @@ public class RemoteActivity extends UpdatableActivity implements AbsListView.Mul
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-            case R.id.action_cancel:
-                cancel();
-                break;
-            case R.id.action_save:
-                try {
-                    this.mRemoteConfig.removeURI(this.mRemoteConfig.getURIs().get(0));
-                    this.mRemoteConfig.addURI(new URIish(((EditText) findViewById(R.id.edit_url)).getText().toString().trim()));
-                    this.mRemoteConfig.update(this.mConfig);
-                    this.mConfig.save();
-                    finish();
-                    break;
-                } catch (Exception e) {
-                    Toast.makeText(this, "Failed to save git config", 0).show();
-                    break;
-                }
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home || itemId == R.id.action_cancel) {
+            cancel();
+        } else if (itemId == R.id.action_save) {
+            try {
+                this.mRemoteConfig.removeURI(this.mRemoteConfig.getURIs().get(0));
+                this.mRemoteConfig.addURI(new URIish(((EditText) findViewById(R.id.edit_url)).getText().toString().trim()));
+                this.mRemoteConfig.update(this.mConfig);
+                this.mConfig.save();
+                finish();
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed to save git config", 0).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -123,7 +119,7 @@ public class RemoteActivity extends UpdatableActivity implements AbsListView.Mul
     @SuppressLint({"InflateParams"})
     private void setupFAB() {
         TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        getTheme().resolveAttribute(android.R.attr.colorPrimary, typedValue, true);
         new FloatingActionButton.Builder(this).withColor(typedValue.data).withDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_add)).withMargins(0, 0, 16, 16).create().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final View viewCreateRefSpec = RemoteActivity.this.getLayoutInflater().inflate(R.layout.dialog_create_refspec, (ViewGroup) null);
@@ -165,29 +161,28 @@ public class RemoteActivity extends UpdatableActivity implements AbsListView.Mul
     }
 
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_delete:
-                try {
-                    List<TypedRefSpec> toDelete = new ArrayList<>();
-                    for (int i = 0; i < this.mListRefSpecs.getCheckedItemCount(); i++) {
-                        toDelete.add((TypedRefSpec) this.mListRefSpecs.getItemAtPosition((int) this.mListRefSpecs.getCheckedItemIds()[i]));
-                    }
-                    for (TypedRefSpec refspec : toDelete) {
-                        if (refspec.getType() == TypedRefSpec.TYPE.FETCH) {
-                            this.mRemoteConfig.removeFetchRefSpec(refspec.getRefSpec());
-                        } else {
-                            this.mRemoteConfig.removePushRefSpec(refspec.getRefSpec());
-                        }
-                    }
-                    mode.finish();
-                    refreshRemote();
-                } catch (Exception e) {
-                    Toast.makeText(this, "Failed to delete refspec", 0).show();
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_delete) {
+            try {
+                List<TypedRefSpec> toDelete = new ArrayList<>();
+                for (int i = 0; i < this.mListRefSpecs.getCheckedItemCount(); i++) {
+                    toDelete.add((TypedRefSpec) this.mListRefSpecs.getItemAtPosition((int) this.mListRefSpecs.getCheckedItemIds()[i]));
                 }
-                return true;
-            default:
-                return false;
+                for (TypedRefSpec refspec : toDelete) {
+                    if (refspec.getType() == TypedRefSpec.TYPE.FETCH) {
+                        this.mRemoteConfig.removeFetchRefSpec(refspec.getRefSpec());
+                    } else {
+                        this.mRemoteConfig.removePushRefSpec(refspec.getRefSpec());
+                    }
+                }
+                mode.finish();
+                refreshRemote();
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed to delete refspec", 0).show();
+            }
+            return true;
         }
+        return false;
     }
 
     public void onDestroyActionMode(ActionMode mode) {

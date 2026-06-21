@@ -61,7 +61,7 @@ public class RemotesActivity extends UpdatableActivity implements AdapterView.On
     @SuppressLint({"InflateParams"})
     private void setupFAB() {
         TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        getTheme().resolveAttribute(android.R.attr.colorPrimary, typedValue, true);
         new FloatingActionButton.Builder(this).withColor(typedValue.data).withDrawable(ContextCompat.getDrawable(this, R.drawable.ic_action_add)).withMargins(0, 0, 16, 16).create().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final View viewCreateRemote = RemotesActivity.this.getLayoutInflater().inflate(R.layout.dialog_create_remote, (ViewGroup) null);
@@ -129,27 +129,26 @@ public class RemotesActivity extends UpdatableActivity implements AdapterView.On
     }
 
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_delete:
-                try {
-                    StoredConfig config = GitUtils.getRepository(this.mProject).getConfig();
-                    List<RemoteConfig> toDelete = new ArrayList<>();
-                    for (int i = 0; i < this.mListRemotes.getCheckedItemCount(); i++) {
-                        toDelete.add((RemoteConfig) this.mListRemotes.getItemAtPosition((int) this.mListRemotes.getCheckedItemIds()[i]));
-                    }
-                    for (RemoteConfig remote : toDelete) {
-                        config.unsetSection("remote", remote.getName());
-                    }
-                    config.save();
-                    mode.finish();
-                    refreshRemotes();
-                } catch (Exception e) {
-                    Toast.makeText(this, "Failed to delete remote", 0).show();
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_delete) {
+            try {
+                StoredConfig config = GitUtils.getRepository(this.mProject).getConfig();
+                List<RemoteConfig> toDelete = new ArrayList<>();
+                for (int i = 0; i < this.mListRemotes.getCheckedItemCount(); i++) {
+                    toDelete.add((RemoteConfig) this.mListRemotes.getItemAtPosition((int) this.mListRemotes.getCheckedItemIds()[i]));
                 }
-                return true;
-            default:
-                return false;
+                for (RemoteConfig remote : toDelete) {
+                    config.unsetSection("remote", remote.getName());
+                }
+                config.save();
+                mode.finish();
+                refreshRemotes();
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed to delete remote", 0).show();
+            }
+            return true;
         }
+        return false;
     }
 
     public void onDestroyActionMode(ActionMode mode) {
